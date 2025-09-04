@@ -38,11 +38,20 @@ if (-not $scopes -match "admin:org" -and -not $scopes -match "write:network_conf
 }
 
 # Validate Azure permissions
-$me = Get-AzAdUser -SignedIn
-[array]$roleAssignments = Get-AzRoleAssignment -ObjectId $me.Id
-[array]$roles = $roleAssignments.RoleDefinitionName
-if (-not($roles -contains 'Owner' -or ($roles -contains 'Contributor' -and $roles -contains 'Network Contributor'))) {
-    Write-Error "You need to have 'Owner' role to run this script"
+try {
+    $me = Get-AzAdUser -SignedIn
+} catch {
+    $me = $null
+}
+
+if ($me) {
+    [array]$roleAssignments = Get-AzRoleAssignment -ObjectId $me.Id
+    [array]$roles = $roleAssignments.RoleDefinitionName
+    if (-not($roles -contains 'Owner' -or ($roles -contains 'Contributor' -and $roles -contains 'Network Contributor'))) {
+        Write-Error "You need to have 'Owner' role to run this script"
+    }
+} else {
+    Write-Host "Running as a service principal. Skipping user-based Azure permission validation."
 }
 
 # Validate subnet addressp prefix and get max runner count
