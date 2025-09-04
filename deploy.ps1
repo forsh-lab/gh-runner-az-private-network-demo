@@ -1,7 +1,7 @@
 [CmdletBinding(DefaultParameterSetName = 'NewVnet')]
 param (
     [Parameter(Mandatory)]
-    [string]$GitHubOrganization = 'forsh-lab',
+    [string]$GitHubOrganization,
     [Parameter(ParameterSetName = 'NewVnet')]
     [string]$Location = 'northeurope',
     [Parameter(ParameterSetName = 'NewVnet')]

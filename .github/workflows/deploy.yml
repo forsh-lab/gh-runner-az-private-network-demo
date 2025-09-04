@@ -43,4 +43,4 @@ jobs:
           inlineScript: |
             Install-Module -Name Az.Resources -Force -Scope CurrentUser
             Import-Module Az.Resources
-            ./deploy.ps1
+            ./deploy.ps1 -GitHubOrganization "forsh-lab"
